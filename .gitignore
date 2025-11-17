@@ -1,0 +1,97 @@
+##############################
+# Java / Maven / Gradle
+##############################
+target/
+build/
+out/
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+hs_err_pid*
+replay_pid*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+##############################
+# Java Project Config
+##############################
+# If you generate config or AI-related temp files:
+config/local.properties
+application.properties
+.env
+*.env
+
+##############################
+# HuggingFace TGI / Docker
+##############################
+# Ignore downloaded model weights
+models/
+*.safetensors
+*.bin
+*.pt
+
+# Docker
+docker-compose.override.yml
+docker-data/
+tmp/
+.cache/
+
+##############################
+# Python (if you add experiments)
+##############################
+__pycache__/
+*.pyc
+.venv/
+venv/
+pip-wheel-metadata/
+dist/
+build/
+
+##############################
+# Desktop App (JavaFX or others)
+##############################
+# Native compiled artifacts
+*.dll
+*.so
+*.dylib
+
+##############################
+# Node/Web Frontend (future website)
+##############################
+node_modules/
+dist/
+build/
+npm-debug.log
+yarn-error.log
+
+##############################
+# IDE Metadata
+##############################
+*.swp
+*.swo
+*.orig
+
+##############################
+# Project-specific
+##############################
+# Email cache, local db, indexes, AI results
+cache/
+db/
+temp/
+generated/
