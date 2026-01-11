@@ -21,5 +21,8 @@ public class DashboardController{
         "attributes", user.getAttributes()
         );
    }
-
+   @GetMapping("/")
+   public String defaultRoute(){
+      return "Need to login";
+   }
 }

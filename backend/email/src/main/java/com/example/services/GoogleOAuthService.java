@@ -3,6 +3,7 @@ package com.example.services;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,7 @@ public class GoogleOAuthService {
    public GoogleOAuthService(OAuth2AuthorizedClientService authorizedClientService) {
        this.authorizedClientService = authorizedClientService;
    }
-   public String getAccessToken(OAuth2AuthenticationToken authentication) {
+   public OAuth2AccessToken getAccessToken(OAuth2AuthenticationToken authentication) {
        // Placeholder method to demonstrate potential functionality
        //token retrieval logic would go here
        OAuth2AuthenticationToken token =  (OAuth2AuthenticationToken) authentication;
@@ -22,6 +23,6 @@ public class GoogleOAuthService {
            token.getAuthorizedClientRegistrationId(), 
            token.getName() // This should be replaced with the actual principal name
        );   
-       return client.getAccessToken().getTokenValue();
+       return client.getAccessToken();
    }    
 }
