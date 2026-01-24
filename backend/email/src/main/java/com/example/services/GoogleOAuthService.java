@@ -15,13 +15,11 @@ public class GoogleOAuthService {
        this.authorizedClientService = authorizedClientService;
    }
    public OAuth2AccessToken getAccessToken(OAuth2AuthenticationToken authentication) {
-       // Placeholder method to demonstrate potential functionality
-       //token retrieval logic would go here
        OAuth2AuthenticationToken token =  (OAuth2AuthenticationToken) authentication;
 
        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
            token.getAuthorizedClientRegistrationId(), 
-           token.getName() // This should be replaced with the actual principal name
+           token.getName()
        );   
        return client.getAccessToken();
    }    
