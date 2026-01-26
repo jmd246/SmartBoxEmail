@@ -32,6 +32,15 @@ public EmailController(EmailService emailService, GoogleOAuthService googleOAuth
             throw new GeneralSecurityException("Failed to fetch emails", e);
         }   
     }
- 
+    
+//search for emails in inbox
+public InboxResponse searchEmails(OAuth2AuthenticationToken authentication, String query) throws GeneralSecurityException {
+    OAuth2AccessToken accessToken = googleOAuthService.getAccessToken(authentication);
+    try {
+        return emailService.searchEmails(accessToken, query);
+    } catch (IOException | GeneralSecurityException e) {
+        throw new GeneralSecurityException("Failed to search emails", e);
+    }
+}        
   
 }

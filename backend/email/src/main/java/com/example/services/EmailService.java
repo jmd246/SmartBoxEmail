@@ -103,4 +103,65 @@ public class EmailService {
 
       return new InboxResponse(inboxRows, pageToken);
     }
+
+
+    //search emails in inbox by query
+    public InboxResponse searchEmails(OAuth2AccessToken authentication, String query) throws GeneralSecurityException, IOException {
+        //build gmail client with access token
+        Gmail gmail = gmailClientFactory.create(authentication);
+        //get list of messages in inbox matching query
+        ListMessagesResponse messagesResponse = gmail.users().messages()
+        .list("me")
+        .setQ(query)
+        .execute(); 
+    
+        List<InboxRow> inboxRows = Collections.synchronizedList(new ArrayList<>());
+        String pageToken = messagesResponse.getNextPageToken();
+        //if no messages in response return empty inbox
+        if(messagesResponse.getMessages() == null || messagesResponse.getMessages().isEmpty()) {
+            return new InboxResponse(inboxRows, pageToken);
+        }
+        //gmail batch request to get message details
+        BatchRequest batch = gmail.batch(); 
+        for(Message message : messagesResponse.getMessages()) {
+            //prepare each message request
+            gmail.users().messages()
+            .get("me", message.getId())
+            .setFormat("metadata")
+            .setMetadataHeaders(List.of("From","Subject"))
+            .setFields("id,internalDate,payload(headers)")
+            .queue(batch, new JsonBatchCallback<Message>(){
+                  @Override
+                  public void onSuccess(Message fullMessage, com.google.api.client.http.HttpHeaders responseHeaders) throws IOException {
+                      String from = fullMessage.getPayload().getHeaders().stream()
+                          .filter(header -> "From".equalsIgnoreCase(header.getName()))
+                          .findFirst()
+                          .map(header -> header.getValue())
+                          .orElse("Unknown Sender");
+  
+                      String subject = fullMessage.getPayload().getHeaders().stream()
+                          .filter(header -> "Subject".equalsIgnoreCase(header.getName()))
+                          .findFirst()
+                          .map(header -> header.getValue())
+                          .orElse("No Subject");
+                      Long receivedAt = fullMessage.getInternalDate();
+                      inboxRows.add(new InboxRow(fullMessage.getId(), from, subject, receivedAt));
+                  }
+  
+                  @Override
+                  public void onFailure(com.google.api.client.googleapis.json.GoogleJsonError e, com.google.api.client.http.HttpHeaders responseHeaders) throws IOException {
+                      //handle failure
+                      System.err.println("Error fetching message: " + e.getMessage());
+                  }
+
+            });
+        }
+    
+        //execute batch request
+        batch.execute();   
+        //batch does not guarantee order so we can sort by received date descending
+        inboxRows.sort((a, b) -> b.getReceivedAt().compareTo(a.getReceivedAt()));
+
+        return new InboxResponse(inboxRows, pageToken);
+    }
 }
