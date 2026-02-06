@@ -26,9 +26,13 @@ public EmailController(EmailService emailService, GoogleOAuthService googleOAuth
     @GetMapping("/email/inbox")
     public InboxResponse getInboxEmails(OAuth2AuthenticationToken authentication) throws GeneralSecurityException {
         OAuth2AccessToken accessToken = googleOAuthService.getAccessToken(authentication);
+        if (accessToken == null) {
+            throw new GeneralSecurityException("No access token found for user");
+        }
         try {
             return emailService.fetchInbox(accessToken);
         } catch (IOException | GeneralSecurityException e) {
+            System.out.println("Error fetching inbox: " + e.getMessage());
             throw new GeneralSecurityException("Failed to fetch emails", e);
         }   
     }

@@ -38,6 +38,7 @@ public class EmailService {
   }
   public InboxResponse fetchInbox(OAuth2AccessToken authentication) throws GeneralSecurityException, IOException {
      //log out access token info
+     System.out.println("Fetching inbox with access token: " + authentication.getTokenValue());
      Logger logger = LoggerFactory.getLogger(EmailService.class);
         logger.info("Fetching inbox with access token: " + authentication.getTokenValue());
         
