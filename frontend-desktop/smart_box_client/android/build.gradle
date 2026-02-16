@@ -16,3 +16,15 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+subprojects { subproject ->
+    subproject.plugins.withId("com.android.library") {
+        subproject.extensions.configure(
+            com.android.build.gradle.LibraryExtension
+        ) { ext ->
+            if (ext.namespace == null) {
+                ext.namespace = subproject.group
+            }
+        }
+    }
+}

@@ -1,3 +1,12 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+  ssl:  
+    enabled: true
+    key-store: classpath:ssl/smartbox.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: smartbox
 spring:
   security:
     oauth2:
@@ -12,10 +21,13 @@ spring:
               - email
               - https://mail.google.com/
               - https://www.googleapis.com/auth/gmail.readonly
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            redirect-uri: "https://localhost:8080/login/oauth2/code/google"
             authorization-grant-type: authorization_code
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+logging:
+  level:
+    org.apache.tomcat.util.net.SSLHostConfig: DEBUG

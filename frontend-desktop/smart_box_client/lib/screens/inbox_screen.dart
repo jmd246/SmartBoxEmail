@@ -59,7 +59,7 @@ Future<InboxResponse> fetchInboxWithSession() async {
 
   final response = await http.get(
     Uri.parse(
-      'http://localhost:8080/email/inbox'),
+      'https://smartbox.local:8080/email/inbox'),
       headers: {
         'Content-Type': 'application/json',
         'Cookie': 'JSESSIONID=$sessionCookie',

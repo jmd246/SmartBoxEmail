@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OAuthWebView extends StatelessWidget {
-  const OAuthWebView({super.key});
+  const OAuthWebView({super.key, required Uri oauthUri});
 
   @override
   Widget build(BuildContext context) {

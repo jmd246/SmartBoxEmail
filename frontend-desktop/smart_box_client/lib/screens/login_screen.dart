@@ -36,7 +36,10 @@ Future<String?> listenForOAuthToken() async {
   final sessionID = request.uri.queryParameters['sid'];
   //shared preferences save token
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('JSESSIONID', sessionID!);
+  if (sessionID != null) {
+    await prefs.setString('JSESSIONID', sessionID);
+  }
+
 
   request.response
     ..statusCode = 200
@@ -50,12 +53,20 @@ Future<String?> listenForOAuthToken() async {
 
 
 void _handleLogin(BuildContext context) async {
-  final uri = Uri.parse('http://localhost:8080/oauth2/authorization/google');
+       String platformUri;
+      // Create service instance
+      if(isMobile){
+         platformUri = 'https://10.0.2.2:8080';
+      }
+      else{
+        platformUri = 'https://localhost:8080';
+      }
+  final uri = Uri.parse('$platformUri/oauth2/authorization/google');
 
   if (isMobile) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const OAuthWebView()),
+      MaterialPageRoute(builder: (_) => OAuthWebView(oauthUri: uri)),
     );
   } else {
     // Desktop: launch system browser
@@ -66,16 +77,16 @@ void _handleLogin(BuildContext context) async {
 
     // Start local server to capture redirect
 
-    final sessionID = await listenForOAuthToken();
-
-      // Create service instance
-      final emailService = EmailService(baseUrl: 'http://localhost:8080');
+    await listenForOAuthToken();
+ 
+      final emailService = EmailService(baseUrl: uri.toString());
 
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => InboxScreen(
-            emailService: emailService,
+            emailService: emailService, 
+            
           ),
         ),
       );

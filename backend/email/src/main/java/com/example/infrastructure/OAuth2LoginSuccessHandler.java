@@ -26,7 +26,6 @@ public class OAuth2LoginSuccessHandler
 
         String redirectUri = "http://localhost:9000/login-success?sid=" + sessionId;
 
-
         getRedirectStrategy().sendRedirect(
                 request,
                         response,

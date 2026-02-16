@@ -18,6 +18,6 @@ public class GmailClientFactory {
            GsonFactory.getDefaultInstance(),
               request -> request.getHeaders().setAuthorization("Bearer " + accessToken.getTokenValue()
            )                
-       ).setApplicationName("smart_box").build();
+       ).setApplicationName("smartbox").build();
    }    
 }

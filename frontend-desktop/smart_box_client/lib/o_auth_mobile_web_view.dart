@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class OAuthWebView extends StatelessWidget {
-  const OAuthWebView({super.key});
+  final Uri oauthUri;
+  const OAuthWebView({super.key, required this.oauthUri});
 
   @override
   Widget build(BuildContext context) {
@@ -10,12 +11,11 @@ class OAuthWebView extends StatelessWidget {
       appBar: AppBar(title: const Text("Sign in with Google")),
       body: InAppWebView(
         initialUrlRequest: URLRequest(
-          url: WebUri('http://localhost:8080/oauth2/authorization/google'),
+          url: WebUri(oauthUri.toString()),
         ),
         onLoadStart: (controller, url) {
           if (url == null) return;
-
-          if (url.scheme == 'emailbox' && url.host == 'login-success') {
+          if (url.scheme == 'smartbox' && url.host == 'login-success') {
             Navigator.pop(context); // close WebView on success
           }
         },
